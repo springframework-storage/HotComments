@@ -65,7 +65,7 @@ public class DataSourceConfig {
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 
-        mapperScannerConfigurer.setBasePackage("org.naver.hackday.dao.origin.mappers");
+        mapperScannerConfigurer.setBasePackage("com.naver.hackday.repository.origin");
         mapperScannerConfigurer.setBeanName("sqlSessionFactory");
 
         return mapperScannerConfigurer;
