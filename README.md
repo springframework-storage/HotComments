@@ -1,89 +1,38 @@
-### 안내
-본 주제는 우수참가자로 선발시 기술 면접 후 **NAVER에서 채용전제형 인턴십**을 진행합니다.
+## 개발 환경 초기 설정
 
-### 주제 선정 배경
-수 많은 사람들이 사용하는 공간에서 정말 인기 있는 댓글을 찾으려면 무엇을 알아야 할까?
-대용량 트래픽 속에서도 흔들리지 않는 견고함이 필요하다!
+### Mybatis 설정
+- /resources/mapper/mapper-config.xml
+- mapper 인터페이스에 바인딩할 xml 파일 설정
+    - /resources/mapper/** 안에만 파일 형식이름을 맞추어 저장하면됨. 세부 디렉토리는 depth에 상관없음.(패턴으로 스캐닝하기 때문)
+    - ##### maaper xml파일 이름 규약 : **Mapper.xml
+    ```java
+    @Bean
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 
-### 요구사항(필수)
-사용자는 공감을 하거나 이미 한 공감에 대해서 취소할 수 있다.
-많은 사용자가 공감을 한 순서로 댓글을 정렬할 수 있어야 하며 공감 수는 사용자에게 노출되어야 한다.
-초당 3000건 이상의 공감을 처리할 수 있어야 한다.
+        sqlSessionFactoryBean.setDataSource(dataSource());
+        sqlSessionFactoryBean.setConfigLocation(this.pathMatchingResourcePatternResolver.getResource("classpath:mapper/mapper-config.xml"));
+        sqlSessionFactoryBean.setMapperLocations(this.pathMatchingResourcePatternResolver.getResources("classpath:mapper/**/*Mapper.xml"));
 
-### 요구사항(선택)
-모든 요청에 대한 처리는 1초 내로 응답되어야 한다.
-두 API가 요구사항을 만족하는지에 대해서 확인할 수 있는 방법을 제공한다.
+        return sqlSessionFactoryBean.getObject();
+    }
+    ```
+    ##### setConfigLocation메서드와 setMapperLocations메서드를 확인
+- MapperMapperScannerConfigurer클래스를 이용하여 mapper 인터페이스 스캐닝 -> @Mapper 애너테이션을 붙이지 않아도됨
+    - com.naver.hackday.repository.origin 패키지 안에 mapper인터페이스를 넣어야함.
+    ```java
+    @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 
-### 개발언어
-Java
+        mapperScannerConfigurer.setBasePackage("com.naver.hackday.repository.");
+        mapperScannerConfigurer.setBeanName("sqlSessionFactory");
 
-### 플랫폼
-Spring Framework 4+, Java 8, 어플리케이션 서버 제한없음, 저장소 제한없음
+        return mapperScannerConfigurer;
+    }
+    ```
+    ##### 위와 같이 DataSourceConfig.java에서 setBasePackage로 등록한 패키지를 스캐닝하기 때문임.
 
-----
-
-### 개발하시는데 참고해주세요.
-- 인증 모듈을 개발할 필요는 없습니다.
-  - 단순하게 파라미터로 전달된 userId가 전달된 ID로 판단하고 처리하셔도 무방합니다.
-- 코드 퀄리티에 신경 써주세요.
-  - 목표를 구현 성공하는 것도 중요하지만 좋은 코드를 생산할 수 있는 역량은 무척이나 중요합니다. :)
-- 커밋 메시지를 잘 작성해주세요.
-  - 커밋 메시지를 통해서 주로 활동한 내역을 리뷰하게 될 것입니다. 커밋 메시지가 잘 작성되지 않았다면 읽기 힘들겠죠.
-  - 전 한글이 편한 한국 사람입니다. ^ㅡ^ 한글로 메시지 작성 부탁드려요.
-  
-### 가벼운 커뮤니케이션
-- https://open.kakao.com/o/gY4rFAL
-- 참여코드: oaGaAu
-- 가벼운 대화지만, 무언가 도출된 내용이 있다면 issue 를 활용해 정리해주세요.
-
-## 커밋 컨벤션
-FORMAT
-----------------------------
-```
-<type>: <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-(Optional) <link>
-```
-
-### Common
-* 모든 라인은 가로 길이 80자 이내로 작성
-* 긴 url link 등 불가피한 경우는 예외
-
-### Subject Line
-#### Allowed `<type>`
-* feat (feature)
-* fix (bug fix)
-* docs (documentation)
-* style (formatting, missing semi colons, …)
-* refactor
-* test (when adding missing tests)
-* chore (maintain)
-
-#### `<subject>` text
-* 수정에 대한 간결하고 명료한 제목
-
-### Message body
-* 해당 변경에 대한 이유, 동기
-* 이전 동작과의 차이 등.
-
-### Link
-* body 외에 추가로 봐야 할 문서나 이슈 등에 대한 링크가 필요할 경우 기입
-* 기입할 때에는 full url 을 넣는다
-
-SAMPLE
--
-```
-feat: 댓글의 이러한 기능을 추가
-
-과거에는 이렇게 했는데, 이런 의도가 있어 이런 변화를 만든다.
-이 동작을 변경했고, 이러한 이유 때문이다.
-이것과 호환을 고려했고, 이런 오동작의 여지가 있다.
-추후 이런 보완을 필요로 한다.
-
-관련이슈
-- issue number
-```
-
-참고:  https://gist.github.com/stephenparish/9941e89d80e2bc58a153
+### Redis & Jedis설정
+- /resources/redis.properties
+- JedisPool설정 -> RedisConfig.java 파일 확인
