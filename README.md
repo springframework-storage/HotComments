@@ -25,7 +25,7 @@
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 
-        mapperScannerConfigurer.setBasePackage("com.naver.hackday.repository.");
+        mapperScannerConfigurer.setBasePackage("com.naver.hackday.repository.origin");
         mapperScannerConfigurer.setBeanName("sqlSessionFactory");
 
         return mapperScannerConfigurer;
