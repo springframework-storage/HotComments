@@ -5,7 +5,6 @@ import com.naver.hackday.exception.BadRequestException;
 import com.naver.hackday.model.codingsquid.BaseCode;
 import com.naver.hackday.model.codingsquid.BaseListRtn;
 import com.naver.hackday.model.codingsquid.BaseResponse;
-import com.naver.hackday.repository.cache.RedisRepository;
 import com.naver.hackday.service.CommentListService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +34,12 @@ public class CommentController extends BaseRestController {
     }
 
     private CommentListService commentListService;
-    private RedisRepository redisRepository;
 
     @Autowired
-    public CommentController(@Qualifier("commentCachingServiceImpl") CommentListService commentListService,
-                             @Qualifier("redisRepositoryImpl") RedisRepository redisRepository) {
+    public CommentController(@Qualifier("commentCachingServiceImpl") CommentListService commentListService) {
         this.commentListService = commentListService;
-        this.redisRepository = redisRepository;
     }
-
+    //TODO size값 파라미터로 받지말고 디폴트로 걸어버리자
     @GetMapping(value = "/comments")
     public BaseResponse<BaseListRtn<CommentDto>> doGet(@RequestHeader(value = "post_id") Integer postId,
                                                        @RequestHeader(value = "user_id") Integer userId,
@@ -52,20 +48,29 @@ public class CommentController extends BaseRestController {
                                                        @RequestParam(value = "orderType", required = false) String orderType,
                                                        @RequestParam(value = "pageNo") Integer pageNo) {
         int paramSize;
-        String paramOrderType;
 
         if (Objects.isNull(size)) paramSize = 10;
         else paramSize = size;
+
+        if (paramSize <= 0) {
+            throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> size 조건 확인");
+        }
+
+        String paramOrderType;
 
         if (Objects.isNull(orderType)) paramOrderType = OrderType.DESC.getTypeString();
         else paramOrderType = orderType;
 
         if (!OrderType.ASC.typeString.equals(paramOrderType)
                 && !OrderType.DESC.typeString.equals(paramOrderType)) {
-            throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage());
+            throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> orderType 조건 확인");
+        }
+        //TODO cursor 조건 문서화 하기
+        if (cursor < 1 || cursor > size * 5) {
+            throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> cursor 조건 확인");
         }
 
-        return commentListService.doGet(cursor, paramSize, pageNo, paramOrderType, postId, userId);
+        return commentListService.doGet(cursor - 1, paramSize, pageNo, paramOrderType, postId, userId);
     }
 
 }

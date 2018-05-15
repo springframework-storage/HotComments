@@ -42,22 +42,24 @@ public class CommentCachingServiceImpl implements CommentListService {
         String pageKey = Integer.toString(pageNo);
         String cachingKey = CachingKeyHelper.getCommentListKey(postKey, pageKey);
         String cachingValidKey = CachingKeyHelper.getValidationCommentListKey(postKey, pageKey);
+        int limitCursor = (size * 5) - size;
+        if (cursor > limitCursor) size = (size * 5) - limitCursor;
 
 
         //TODO 트랜잭션 && pipeline적용 && key가 존재하지 않을 경우 예외처리
         if (cachingServiceHelper.isNeedCaching(() -> redisRepository.getData(cachingValidKey))) {
 
-            result = commentListService.doGet(cursor, size, pageNo, orderType, postId, userId);
+            result = commentListService.doGet(cursor, size * 5, pageNo, orderType, postId, userId);
 
             for (CommentDto comments : result.getResult().getDatas()) {
-                redisRepository.setListToListRight(cachingKey, comments, 20000L);
+                redisRepository.setListToListRight(cachingKey, comments, 200000L);
             }
             redisRepository.setData(cachingValidKey,
                     new ValidCachingKey(cachingKey, true),
-                    20000L);
+                    200000L);
 
             Stream<CommentDto> rtnList = result.getResult().getDatas().stream();
-            List<CommentDto> dtos = rtnList.skip(cursor - 1)
+            List<CommentDto> dtos = rtnList.skip(cursor)
                     .limit(size)
                     .collect(Collectors.toList());
 
@@ -72,7 +74,8 @@ public class CommentCachingServiceImpl implements CommentListService {
         BaseListRtn<CommentDto> commentDtoBaseListRtn = new BaseListRtn<>();
 
         //TODO 데이터 크기 조정
-        List<Object> datas = cachingServiceHelper.useCaching(key -> redisRepository.getRangeFromList(key, cursor, (cursor + size - 1)), cachingKey);
+        int endPoint = cursor + size - 1;
+        List<Object> datas = cachingServiceHelper.useCaching(key -> redisRepository.getRangeFromList(key, cursor, endPoint), cachingKey);
 
         commentDtoBaseListRtn.setDatas((List<CommentDto>)(Object) datas);
         commentDtoBaseListRtn.setTotalSize(datas.size());

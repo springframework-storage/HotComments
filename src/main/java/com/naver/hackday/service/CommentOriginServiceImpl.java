@@ -26,10 +26,9 @@ public class CommentOriginServiceImpl implements CommentListService {
         BaseResponse<BaseListRtn<CommentDto>> result = new BaseResponse<>();
         BaseListRtn<CommentDto> baseListRtn = new BaseListRtn<>();
 
-        //캐싱 히트율을 높이기위해 페이지별로 데이터를 100개씩 가져옴.
-        List<CommentDto> dtos = commentRepository.retreiveCommentOrderByLikeCount((pageNo - 1) * 100, 100);
+        //캐싱 히트율을 높이기위해 페이지별로 데이터를 (size * 5) 개씩 가져옴.
+        List<CommentDto> dtos = commentRepository.retreiveCommentOrderByLikeCount((pageNo - 1) * size, size);
 
-        baseListRtn.setTotalSize(100);
         baseListRtn.setDatas(dtos);
 
         result.setReturnCode(BaseCode.SUCCESS.getCode());
