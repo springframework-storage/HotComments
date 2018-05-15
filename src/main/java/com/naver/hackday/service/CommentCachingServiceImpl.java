@@ -36,20 +36,22 @@ public class CommentCachingServiceImpl implements CommentListService {
     @Override
     public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int size, int pageNo, String orderType, int postId, int userId) {
         BaseResponse<BaseListRtn<CommentDto>> result;
-        String cachingKey = CachingKeyHelper.getCommentListKey(Integer.toString(postId), Integer.toString(pageNo));
-        ValidCachingKey validKey = new ValidCachingKey();
-        validKey.setValidKey(cachingKey);
+        String postKey = Integer.toString(postId);
+        String pageKey = Integer.toString(pageNo);
+        String cachingKey = CachingKeyHelper.getCommentListKey(postKey, pageKey);
+        String cachingValidKey = CachingKeyHelper.getValidationCommentListKey(postKey, pageKey);
 
-        //TODO 캐싱이 필요한지 검사 && 캐싱 키 값 재설정 && 캐싱 로직 재설계 && 캐싱 만료시간 설정 && pipeline적용 && key가 존재하지 않을 경우 예외처리
-        if (cachingServiceHelper.isNeedCaching(
-                key -> redisRepository.isMember(key, validKey), //이 부분 수정해야함
-                CachingKeyHelper.getValidationCommentListKey())) {
+        //TODO 트랜잭션 && pipeline적용 && key가 존재하지 않을 경우 예외처리
+        if (cachingServiceHelper.isNeedCaching(() -> redisRepository.getData(cachingValidKey))) {
+
             result = commentListService.doGet(cursor, size, pageNo, orderType, postId, userId);
-            redisRepository.setListToListRight(cachingKey, result.getResult().getDatas());
+
             for (CommentDto comments : result.getResult().getDatas()) {
-                redisRepository.setListToListRight(cachingKey, comments);
+                redisRepository.setListToListRight(cachingKey, comments, 20000L);
             }
-            redisRepository.addMemberToSet(CachingKeyHelper.getValidationCommentListKey(), validKey);
+            redisRepository.setData(cachingValidKey,
+                    new ValidCachingKey(cachingKey, true),
+                    20000L);
 
             Stream<CommentDto> rtnList = result.getResult().getDatas().stream();
             List<CommentDto> dtos = rtnList.skip(cursor - 1)
