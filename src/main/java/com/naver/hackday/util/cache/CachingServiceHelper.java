@@ -1,12 +1,11 @@
 package com.naver.hackday.util.cache;
 
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 public class CachingServiceHelper<T, R> {
 
-    public boolean isNeedCaching(Predicate<String> invokeApi, String key) {
-        return !invokeApi.test(key);
+    public boolean isNeedCaching(Supplier<Object> invokeApi) {
+        return invokeApi.get() == null;
     }
 
     public R useCaching(Function<T, R> invokeApi, T key) {
