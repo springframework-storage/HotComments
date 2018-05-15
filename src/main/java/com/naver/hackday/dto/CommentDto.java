@@ -1,4 +1,4 @@
-package org.naver.hackday.dto;
+package com.naver.hackday.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
@@ -12,19 +12,19 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class CommentDto {
 
-    @JsonProperty("comment_id")
+    @JsonProperty("commentId")
     private int id;
-    @JsonProperty("post_id")
+    @JsonProperty("postId")
     private int postId;
-    @JsonProperty("user_id")
+    @JsonProperty("userId")
     private int userId;
     @JsonProperty("content")
     private String content;
-    @JsonProperty("like_count")
-    private int likeCount;
-    @JsonProperty("dislike_count")
-    private int dislikeCount;
-    @JsonProperty("total_react_count")
-    private int totalReactCount;
+    @JsonProperty("nCount")
+    private int nCount;
+    @JsonProperty("pCount")
+    private int pCount;
+    @JsonProperty("totalCount")
+    private int totalCount;
 
 }
