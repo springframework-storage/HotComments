@@ -19,8 +19,10 @@ public class RedisRepositoryImpl implements RedisRepository {
     }
 
     @Override
-    public Long setListToListRight(String key, Object data) {
-        return redisTemplate.opsForList().rightPushAll(key, data);
+    public Long setListToListRight(String key, Object data, Long expiredTime) {
+        Long rowCount = redisTemplate.opsForList().rightPushAll(key, data);
+        setExpiredTimeMillisec(key, expiredTime);
+        return rowCount;
     }
 
     @Override
@@ -29,8 +31,9 @@ public class RedisRepositoryImpl implements RedisRepository {
     }
 
     @Override
-    public void setData(String key, Object data) {
+    public void setData(String key, Object data, Long expiredTime) {
         redisTemplate.opsForValue().set(key, data);
+        setExpiredTimeMillisec(key, expiredTime);
     }
 
     @Override
@@ -38,23 +41,27 @@ public class RedisRepositoryImpl implements RedisRepository {
         return redisTemplate.opsForValue().get(key);
     }
 
-    @Override
-    public void setExpiredTimeMillisec(String key, Long expiredTime) {
+    private void setExpiredTimeMillisec(String key, Long expiredTime) {
         redisTemplate.expire(key, expiredTime, TimeUnit.MILLISECONDS);
     }
 
-    @Override
     public Long getExpiredTimeMillisec(String key) {
         return redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public Long addMemberToSet(String key, Object data) {
-        return redisTemplate.opsForSet().add(key, data);
+    public Object getDataOfHashKey(String key, String HashKey) {
+        return redisTemplate.opsForHash().get(key, HashKey);
     }
 
     @Override
-    public Boolean isMember(String key, Object data) {
-        return redisTemplate.opsForSet().isMember(key, data);
+    public boolean hasKey(String key, String hashKey) {
+        return redisTemplate.opsForHash().hasKey(key, hashKey);
+    }
+
+    @Override
+    public void addDataOfHashKey(String key, String HashKey, Object data, Long expiredTime) {
+        redisTemplate.opsForHash().put(key, HashKey, data);
+        setExpiredTimeMillisec(key, expiredTime);
     }
 }
