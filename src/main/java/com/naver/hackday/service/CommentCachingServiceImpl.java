@@ -12,6 +12,7 @@ import com.naver.hackday.util.cache.CachingServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class CommentCachingServiceImpl implements CommentListService {
         this.commentListService = commentListService;
     }
 
+    @Transactional
     @SuppressWarnings("unchecked")
     @Override
     public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int size, int pageNo, String orderType, int postId, int userId) {
@@ -40,6 +42,7 @@ public class CommentCachingServiceImpl implements CommentListService {
         String pageKey = Integer.toString(pageNo);
         String cachingKey = CachingKeyHelper.getCommentListKey(postKey, pageKey);
         String cachingValidKey = CachingKeyHelper.getValidationCommentListKey(postKey, pageKey);
+
 
         //TODO 트랜잭션 && pipeline적용 && key가 존재하지 않을 경우 예외처리
         if (cachingServiceHelper.isNeedCaching(() -> redisRepository.getData(cachingValidKey))) {

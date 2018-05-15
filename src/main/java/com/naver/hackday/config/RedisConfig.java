@@ -57,8 +57,9 @@ public class RedisConfig {
     @Bean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate() throws IOException {
         final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-
+        redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
+
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
