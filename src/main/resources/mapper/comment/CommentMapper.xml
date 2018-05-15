@@ -2,11 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.naver.hackday.dao.origin.mappers.CommentMapper">
+<mapper namespace="com.naver.hackday.repository.origin.mappers.CommentMapper">
+
     <select id="retreiveCommentOrderByLikeCount" parameterType="java.lang.Integer" resultType="com.naver.hackday.dto.CommentDto">
       SELECT id, postId, userId, content, nCount, pCount, totalCount
       FROM TB_COMMENT
       ORDER BY nCount DESC
       LIMIT #{cursor}, #{size}
     </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.naver.hackday.dto.CommentDto">
+        SELECT *
+        FROM TB_COMMENT m
+        WHERE m.id = #{commentId}
+    </select>
+
 </mapper>
