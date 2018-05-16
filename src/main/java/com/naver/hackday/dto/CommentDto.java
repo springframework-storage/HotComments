@@ -15,8 +15,8 @@ public class CommentDto {
     private int postId;
     private int userId;
     private String content;
-    private int nCount;
     private int pCount;
+    private int nCount;
     private int totalCount;
 
 }
