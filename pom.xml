@@ -22,12 +22,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<jackson.version>2.9.2</jackson.version>
-		<jackson.codehaus.version>1.9.13</jackson.codehaus.version>
+		<jackson.version>2.9.4</jackson.version>
+		<jackson.codehaus.version>1.9.2</jackson.codehaus.version>
 		<spring.version>4.3.14.RELEASE</spring.version>
 	</properties>
 
 	<dependencies>
+		<!-- spring batch -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency>
+		
 		<!-- spring boot web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -126,7 +132,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		
+		<!-- spring batch test -->
+		<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
