@@ -20,7 +20,6 @@ public class RedisRepositoryImpl implements RedisRepository {
 
     @Override
     public Long setListToListRight(String key, Object data, Long expiredTime) {
-        System.out.println(data.toString());
         Long rowCount = redisTemplate.opsForList().rightPush(key, data);
         setExpiredTimeMillisec(key, expiredTime);
         return rowCount;
