@@ -20,6 +20,12 @@ public class RedisPstReactService implements PstReactRepository {
     this.redisTemplate = redisTemplate;
   }
 
+  /*
+  객체의 초기화
+  객체가 생성된 후 별도의 초기화 작업을 위해 실행하는 메소드
+  init 메소드는 WAS가 띄워질 때 실행됩니다.
+  (Autowired가 먼저 된 후 init 메소드가 실행됩니다.)
+   */
   @PostConstruct
   private void init() {
     setOperations = redisTemplate.opsForSet();
