@@ -16,4 +16,11 @@
         	WHERE id = #{commentId}
     	</foreach> 
 	</update>
+	
+	<update id="updateDecreasePCount" parameterType="java.util.List">
+		<foreach collection="list" item="commentId" index="index" separator=";">
+        	UPDATE tb_comment SET pCount = pCount-1
+        	WHERE id = #{commentId}
+    	</foreach> 
+	</update>
 </mapper>
