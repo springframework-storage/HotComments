@@ -44,7 +44,7 @@ public class CommentController extends BaseRestController {
     public BaseResponse<BaseListRtn<CommentDto>> doGet(@RequestHeader(value = "postId") Integer postId,
                                                        @RequestHeader(value = "userId") Integer userId,
                                                        @RequestParam(value = "cursor") Integer cursor,
-                                                       @RequestParam(value = "size", required = false) Integer pageSize,
+                                                       @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                        @RequestParam(value = "orderType", required = false) String orderType,
                                                        @RequestParam(value = "pageNo") Integer pageNo) {
         int paramSize;
