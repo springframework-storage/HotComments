@@ -20,7 +20,7 @@ public class IncreaseReader implements ItemReader<Integer> {
 	//Redis에서 공감 요청 된 댓글 번호를 차례로 읽음
 	@Override
 	public Integer read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		Integer commentId = listOperations.leftPop("empathy");
+		Integer commentId = listOperations.leftPop("PstInsert");
 		return (commentId == null ? null : commentId);   //Redis의 List가 비어 있으면 null을 return 후 Job을 종료
 	}
 
