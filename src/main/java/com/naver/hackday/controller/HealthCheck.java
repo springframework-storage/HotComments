@@ -14,5 +14,5 @@ public class HealthCheck {
         response.setStatus(HttpStatus.OK.value());
         return "i'm running";
     }
-    
+
 }

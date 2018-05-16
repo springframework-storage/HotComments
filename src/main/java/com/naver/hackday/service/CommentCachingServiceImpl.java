@@ -36,20 +36,20 @@ public class CommentCachingServiceImpl implements CommentListService {
     @Transactional
     @SuppressWarnings("unchecked")
     @Override
-    public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int size, int pageNo, String orderType, int postId, int userId) {
+    public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId) {
         BaseResponse<BaseListRtn<CommentDto>> result;
         String postKey = Integer.toString(postId);
         String pageKey = Integer.toString(pageNo);
         String cachingKey = CachingKeyHelper.getCommentListKey(postKey, pageKey);
         String cachingValidKey = CachingKeyHelper.getValidationCommentListKey(postKey, pageKey);
-        int limitCursor = (size * 5) - size;
-        if (cursor > limitCursor) size = (size * 5) - limitCursor;
+        int limitCursor = (pageSize * 5) - pageSize;
+        if (cursor > limitCursor) pageSize = (pageSize * 5) - limitCursor;
 
 
         //TODO 트랜잭션 && pipeline적용 && key가 존재하지 않을 경우 예외처리
         if (cachingServiceHelper.isNeedCaching(() -> redisRepository.getData(cachingValidKey))) {
 
-            result = commentListService.doGet(cursor, size * 5, pageNo, orderType, postId, userId);
+            result = commentListService.doGet(cursor, pageSize * 5, pageNo, orderType, postId, userId);
 
             for (CommentDto comments : result.getResult().getDatas()) {
                 redisRepository.setListToListRight(cachingKey, comments, 200000L);
@@ -60,7 +60,7 @@ public class CommentCachingServiceImpl implements CommentListService {
 
             Stream<CommentDto> rtnList = result.getResult().getDatas().stream();
             List<CommentDto> dtos = rtnList.skip(cursor)
-                    .limit(size)
+                    .limit(pageSize)
                     .collect(Collectors.toList());
 
             result.getResult().setDatas(dtos);
@@ -74,7 +74,7 @@ public class CommentCachingServiceImpl implements CommentListService {
         BaseListRtn<CommentDto> commentDtoBaseListRtn = new BaseListRtn<>();
 
         //TODO 데이터 크기 조정
-        int endPoint = cursor + size - 1;
+        int endPoint = cursor + pageSize - 1;
         List<Object> datas = cachingServiceHelper.useCaching(key -> redisRepository.getRangeFromList(key, cursor, endPoint), cachingKey);
 
         commentDtoBaseListRtn.setDatas((List<CommentDto>)(Object) datas);

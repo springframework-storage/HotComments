@@ -41,19 +41,19 @@ public class CommentController extends BaseRestController {
     }
     //TODO size값 파라미터로 받지말고 디폴트로 걸어버리자
     @GetMapping(value = "/comments")
-    public BaseResponse<BaseListRtn<CommentDto>> doGet(@RequestHeader(value = "post_id") Integer postId,
-                                                       @RequestHeader(value = "user_id") Integer userId,
+    public BaseResponse<BaseListRtn<CommentDto>> doGet(@RequestHeader(value = "postId") Integer postId,
+                                                       @RequestHeader(value = "userId") Integer userId,
                                                        @RequestParam(value = "cursor") Integer cursor,
-                                                       @RequestParam(value = "size", required = false) Integer size,
+                                                       @RequestParam(value = "size", required = false) Integer pageSize,
                                                        @RequestParam(value = "orderType", required = false) String orderType,
                                                        @RequestParam(value = "pageNo") Integer pageNo) {
         int paramSize;
 
-        if (Objects.isNull(size)) paramSize = 10;
-        else paramSize = size;
+        if (Objects.isNull(pageSize)) paramSize = 10;
+        else paramSize = pageSize;
 
         if (paramSize <= 0) {
-            throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> size 조건 확인");
+            throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> pageSize 조건 확인");
         }
 
         String paramOrderType;
@@ -66,7 +66,7 @@ public class CommentController extends BaseRestController {
             throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> orderType 조건 확인");
         }
         //TODO cursor 조건 문서화 하기
-        if (cursor < 1 || cursor > size * 5) {
+        if (Objects.isNull(cursor) || cursor < 1 || cursor > pageSize * 5) {
             throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> cursor 조건 확인");
         }
 

@@ -22,12 +22,12 @@ public class CommentOriginServiceImpl implements CommentListService {
     }
 
     @Override
-    public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int size, int pageNo, String orderType, int postId, int userId) {
+    public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId) {
         BaseResponse<BaseListRtn<CommentDto>> result = new BaseResponse<>();
         BaseListRtn<CommentDto> baseListRtn = new BaseListRtn<>();
 
         //캐싱 히트율을 높이기위해 페이지별로 데이터를 (size * 5) 개씩 가져옴.
-        List<CommentDto> dtos = commentRepository.retreiveCommentOrderByLikeCount((pageNo - 1) * size, size);
+        List<CommentDto> dtos = commentRepository.retreiveCommentOrderByLikeCount((pageNo - 1) * pageSize, pageSize);
 
         baseListRtn.setDatas(dtos);
 
