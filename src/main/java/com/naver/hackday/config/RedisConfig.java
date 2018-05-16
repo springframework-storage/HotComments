@@ -43,7 +43,7 @@ public class RedisConfig {
         final JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
 
         jedisConnectionFactory.setHostName(redisConfig.getProperty("redis.hostname"));
-        jedisConnectionFactory.setPassword(redisConfig.getProperty("redis.password"));
+        //jedisConnectionFactory.setPassword(redisConfig.getProperty("redis.password"));
         jedisConnectionFactory.setPort(Integer.parseInt(redisConfig.getProperty("redis.port")));
         jedisConnectionFactory.setUsePool(Boolean.parseBoolean(redisConfig.getProperty("redis.pool.use")));
         jedisConnectionFactory.setTimeout(Integer.parseInt(redisConfig.getProperty("redis.timeout")));
