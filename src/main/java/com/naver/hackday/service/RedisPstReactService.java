@@ -2,6 +2,7 @@ package com.naver.hackday.service;
 
 import com.naver.hackday.repository.PstReactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class RedisPstReactService implements PstReactRepository {
   private static final String KEY = "Pst";
   private RedisTemplate<String, Integer> redisTemplate;
   private SetOperations<String, Integer> setOperations;
+  private ListOperations<String, Integer> listOperations;   // batch에서 사용할 list
 
   @Autowired
   private RedisPstReactService(RedisTemplate redisTemplate) {
@@ -29,6 +31,7 @@ public class RedisPstReactService implements PstReactRepository {
   @PostConstruct
   private void init() {
     setOperations = redisTemplate.opsForSet();
+    listOperations = redisTemplate.opsForList();
   }
 
   // 사용자의 공감 요청 처리
@@ -37,10 +40,12 @@ public class RedisPstReactService implements PstReactRepository {
     // 이미 해당 댓글에 공감했다면 공감 취소
     if (this.isMember(commentId, userId)) {
       this.delete(commentId, userId);
+      listOperations.rightPush(KEY + "Delete", commentId);
     }
     // 아니라면 공감
     else {
       this.insert(postId, commentId, userId);
+      listOperations.rightPush(KEY + "Insert", commentId);
     }
   }
 
