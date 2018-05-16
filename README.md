@@ -68,7 +68,7 @@ result: {
 
 - cursor값이 null인경우
 - cursor값이 pageSize * 5 보다 큰 경우
-    - pageSize의 5배 만큼만 DB에서 가져온 후 Redis에 캐싱함.
+    - pageSize의 5배 만큼만 DB에서 가져온 후 Redis에 캐싱함.(캐싱 히트율을 높이기 위함)
 - orderType에 ASC, DESC가 아닌 다른 값이 들어간 경우
 - pageSize < 0인 경우
 
