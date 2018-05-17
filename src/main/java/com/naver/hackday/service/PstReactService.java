@@ -54,11 +54,11 @@ public class PstReactService implements PstReactRepository {
   public void pstReact(int postId, int commentId, int userId) {
     // 이미 해당 댓글에 공감했다면 공감 취소
     if (this.isMember(commentId, userId)) {
-      this.delete(commentId, userId);
+      this.pstDelete(commentId, userId);
     }
     // 아니라면 공감
     else {
-      this.insert(postId, commentId, userId);
+      this.pstInsert(postId, commentId, userId);
     }
   }
 
@@ -68,8 +68,7 @@ public class PstReactService implements PstReactRepository {
    * @param commentId
    * @param userId
    */
-  @Override
-  public void insert(int postId, int commentId, int userId) {
+  public void pstInsert(int postId, int commentId, int userId) {
 
     this.usersByCommentIdSet.add(KEY + Integer.toString(commentId), userId);
     this.commentsByUserIdSet.add(Integer.toString(userId) + KEY, commentId);
@@ -83,8 +82,7 @@ public class PstReactService implements PstReactRepository {
    * @param commentId
    * @param userId
    */
-  @Override
-  public void delete(int commentId, int userId) {
+  public void pstDelete(int commentId, int userId) {
 
     this.usersByCommentIdSet.remove(KEY + Integer.toString(commentId), userId);
     this.commentsByUserIdSet.remove(Integer.toString(userId) + KEY, commentId);
