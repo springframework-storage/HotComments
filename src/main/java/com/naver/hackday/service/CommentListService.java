@@ -1,12 +1,11 @@
 package com.naver.hackday.service;
 
 
-import com.naver.hackday.dto.CommentDto;
 import com.naver.hackday.model.codingsquid.BaseListRtn;
 import com.naver.hackday.model.codingsquid.BaseResponse;
 
-public interface CommentListService {
+public interface CommentListService<T> {
 
-    BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId);
+    BaseResponse<BaseListRtn<T>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId);
 
 }

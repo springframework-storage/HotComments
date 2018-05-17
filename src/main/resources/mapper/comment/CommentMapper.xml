@@ -6,7 +6,7 @@
     <select id="retreiveCommentOrderByLikeCount" parameterType="java.lang.Integer" resultType="com.naver.hackday.dto.CommentDto">
       SELECT id, postId, userId, content, nCount, pCount, totalCount
       FROM tb_comment
-      ORDER BY nCount DESC
+      ORDER BY pCount DESC
       LIMIT #{cursor}, #{size}
     </select>
 </mapper>
