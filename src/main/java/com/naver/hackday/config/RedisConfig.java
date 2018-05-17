@@ -1,5 +1,6 @@
 package com.naver.hackday.config;
 
+import com.naver.hackday.dto.CommentDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -57,8 +58,9 @@ public class RedisConfig {
     @Bean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate() throws IOException {
         final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-
+        redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
+
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
@@ -66,6 +68,17 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
         redisTemplate.afterPropertiesSet();
+
+        return redisTemplate;
+    }
+
+    @Bean(name = "commentDtoRedisTemplate")
+    public RedisTemplate<String, CommentDto> commentDtoRedisTemplate() throws IOException {
+        final RedisTemplate<String, CommentDto> redisTemplate = new RedisTemplate<>();
+
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(CommentDto.class));
 
         return redisTemplate;
     }

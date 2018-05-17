@@ -1,38 +1,78 @@
-## 개발 환경 초기 설정
+## Comment 리스트 조회
 
-### Mybatis 설정
-- /resources/mapper/mapper-config.xml
-- mapper 인터페이스에 바인딩할 xml 파일 설정
-    - /resources/mapper/** 안에만 파일 형식이름을 맞추어 저장하면됨. 세부 디렉토리는 depth에 상관없음.(패턴으로 스캐닝하기 때문)
-    - ##### maaper xml파일 이름 규약 : **Mapper.xml
-    ```java
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+- endpoint: GET /comments/cursor={cursor}&pageSize={pageSize}&orderType={orderType}
 
-        sqlSessionFactoryBean.setDataSource(dataSource());
-        sqlSessionFactoryBean.setConfigLocation(this.pathMatchingResourcePatternResolver.getResource("classpath:mapper/mapper-config.xml"));
-        sqlSessionFactoryBean.setMapperLocations(this.pathMatchingResourcePatternResolver.getResources("classpath:mapper/**/*Mapper.xml"));
+### Request
 
-        return sqlSessionFactoryBean.getObject();
-    }
-    ```
-    ##### setConfigLocation메서드와 setMapperLocations메서드를 확인
-- MapperMapperScannerConfigurer클래스를 이용하여 mapper 인터페이스 스캐닝 -> @Mapper 애너테이션을 붙이지 않아도됨
-    - com.naver.hackday.repository.origin 패키지 안에 mapper인터페이스를 넣어야함.
-    ```java
-    @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+- Query parameter
 
-        mapperScannerConfigurer.setBasePackage("com.naver.hackday.repository.origin");
-        mapperScannerConfigurer.setBeanName("sqlSessionFactory");
+| Key    | Value | Type | Info | required |
+| :----- | :---- | :--- | :--- | :------- |
+| pageNo | 0 | int | 현재 페이지 | true |
+| cursor | 0 | int | 현재 포인터 | true |
+| pageSize   | 10  | int  | 한 페이지의 사이즈 | false (default : 10) |
+| orderType | "DESC" | enum | 정렬 방법 ("ASC", "DESC") | false (default : "DESC") |
 
-        return mapperScannerConfigurer;
-    }
-    ```
-    ##### 위와 같이 DataSourceConfig.java에서 setBasePackage로 등록한 패키지를 스캐닝하기 때문임.
+- Header parameter
 
-### Redis & Jedis설정
-- /resources/redis.properties
-- JedisPool설정 -> RedisConfig.java 파일 확인
+| Key    | Value | Type | Info |
+| :----- | :---- | :--- | :--- |
+| postId | 1 | int | 게시글 아이디 값 |
+| userId | 1 | int | 사용자 아이디 값 |
+
+### Response
+
+#### Success
+- status code : 200
+
+| Key    | Value | Type | Info |
+| :----- | :---- | :--- | :--- |
+| total_size | 10 | int | 데이터 리스트의 갯수(default: 10 -> 수정 불가) |
+| data_list | 데이터 리스트 | array | 데이터 리스트 |
+
+```Json
+result: {
+    "total_size": 10,
+    "data_list": [
+        {
+            "post_id": 1,
+            "user_id": 1,
+            "content": "wonderful naver hackday",
+            "like_num": 10,
+            "dislike_num": 1,
+            "total_react_count": 11
+        },
+        {
+            "post_id": 1,
+            "user_id": 2,
+            "content": "i like you",
+            "like_num": 7,
+            "dislike_num": 1,
+            "total_react_count": 8
+        },
+        {
+            "post_id": 1,
+            "user_id": 3,
+            "content": "i love you",
+            "like_num": 6,
+            "dislike_num": 1,
+            "total_react_count": 7
+        }
+    ]
+}
+```
+
+#### Fail
+
+##### 잘못된 파라미터
+
+- cursor값이 null인경우
+- cursor값이 pageSize * 5 보다 큰 경우
+    - pageSize의 5배 만큼만 DB에서 가져온 후 Redis에 캐싱함.(캐싱 히트율을 높이기 위함)
+- orderType에 ASC, DESC가 아닌 다른 값이 들어간 경우
+- pageSize < 0인 경우
+
+| Key    | Value | Type | Info |
+| :----- | :---- | :--- | :--- |
+| return_code | 404 | int | 응답 코드 |
+| return_message | 잘못된 파라미터 요청 -> size 조건 확인 | string | 응답 메시지 |

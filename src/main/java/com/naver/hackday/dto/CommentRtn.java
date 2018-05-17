@@ -1,15 +1,12 @@
 package com.naver.hackday.dto;
 
-import lombok.EqualsAndHashCode;
+import com.naver.hackday.model.codingsquid.ReactStatus;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
-public class CommentDto {
+public class CommentRtn {
 
     private int id;
     private int postId;
@@ -18,5 +15,6 @@ public class CommentDto {
     private int pCount;
     private int nCount;
     private int totalCount;
+    private ReactStatus reactStatus;
 
 }
