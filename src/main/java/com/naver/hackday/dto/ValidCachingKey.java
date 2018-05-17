@@ -10,6 +10,6 @@ import lombok.*;
 public class ValidCachingKey {
 
     private String key;
-    private boolean validCheck;
+    private long cachingTime;
 
 }
