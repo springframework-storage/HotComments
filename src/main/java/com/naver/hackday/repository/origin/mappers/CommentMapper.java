@@ -2,6 +2,9 @@ package com.naver.hackday.repository.origin.mappers;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.naver.hackday.dto.CommentDto;
 import com.naver.hackday.model.PCount;
 
 public interface CommentMapper {
