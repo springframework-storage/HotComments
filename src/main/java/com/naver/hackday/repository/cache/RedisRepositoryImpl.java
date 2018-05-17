@@ -83,7 +83,11 @@ public class RedisRepositoryImpl implements RedisRepository {
 
     @Override
     public boolean isMember(String key, int member) {
-        return redisTemplate.opsForSet().isMember(key, member);
+        Boolean isMemberUser = redisTemplate.opsForSet().isMember(key, member);
+        if (isMemberUser == null) {
+            return false;
+        }
+        return isMemberUser;
     }
 
 }
