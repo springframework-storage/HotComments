@@ -1,6 +1,6 @@
 package com.naver.hackday.controller;
 
-import com.naver.hackday.dto.CommentDto;
+import com.naver.hackday.dto.CommentRtn;
 import com.naver.hackday.exception.BadRequestException;
 import com.naver.hackday.model.codingsquid.BaseCode;
 import com.naver.hackday.model.codingsquid.BaseListRtn;
@@ -40,19 +40,15 @@ public class CommentController extends BaseRestController {
         this.commentListService = commentListService;
     }
     //TODO size값 파라미터로 받지말고 디폴트로 걸어버리자
+    @SuppressWarnings("unchecked")
     @GetMapping(value = "/comments")
-    public BaseResponse<BaseListRtn<CommentDto>> doGet(@RequestHeader(value = "postId") Integer postId,
+    public BaseResponse<BaseListRtn<CommentRtn>> doGet(@RequestHeader(value = "postId") Integer postId,
                                                        @RequestHeader(value = "userId") Integer userId,
                                                        @RequestParam(value = "cursor") Integer cursor,
-                                                       @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                       @RequestParam(value = "orderType", required = false) String orderType,
+                                                       @RequestParam(value = "pageSize") Integer pageSize,
+                                                       @RequestParam(value = "orderType") String orderType,
                                                        @RequestParam(value = "pageNo") Integer pageNo) {
-        int paramSize;
-
-        if (Objects.isNull(pageSize)) paramSize = 10;
-        else paramSize = pageSize;
-
-        if (paramSize <= 0) {
+        if (pageSize <= 0) {
             throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> pageSize 조건 확인");
         }
 
@@ -66,11 +62,11 @@ public class CommentController extends BaseRestController {
             throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> orderType 조건 확인");
         }
         //TODO cursor 조건 문서화 하기
-        if (Objects.isNull(cursor) || cursor < 1 || cursor > pageSize * 5) {
+        if (Objects.isNull(cursor) || cursor < 1 || cursor > pageSize) {
             throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> cursor 조건 확인");
         }
 
-        return commentListService.doGet(cursor - 1, paramSize, pageNo, paramOrderType, postId, userId);
+        return commentListService.doGet(cursor - 1, pageSize, pageNo, paramOrderType, postId, userId);
     }
 
 }

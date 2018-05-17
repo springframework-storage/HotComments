@@ -1,5 +1,6 @@
 package com.naver.hackday.config;
 
+import com.naver.hackday.dto.CommentDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -43,7 +44,7 @@ public class RedisConfig {
         final JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
 
         jedisConnectionFactory.setHostName(redisConfig.getProperty("redis.hostname"));
-        //jedisConnectionFactory.setPassword(redisConfig.getProperty("redis.password"));
+        jedisConnectionFactory.setPassword(redisConfig.getProperty("redis.password"));
         jedisConnectionFactory.setPort(Integer.parseInt(redisConfig.getProperty("redis.port")));
         jedisConnectionFactory.setUsePool(Boolean.parseBoolean(redisConfig.getProperty("redis.pool.use")));
         jedisConnectionFactory.setTimeout(Integer.parseInt(redisConfig.getProperty("redis.timeout")));
@@ -67,6 +68,17 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
         redisTemplate.afterPropertiesSet();
+
+        return redisTemplate;
+    }
+
+    @Bean(name = "commentDtoRedisTemplate")
+    public RedisTemplate<String, CommentDto> commentDtoRedisTemplate() throws IOException {
+        final RedisTemplate<String, CommentDto> redisTemplate = new RedisTemplate<>();
+
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(CommentDto.class));
 
         return redisTemplate;
     }
