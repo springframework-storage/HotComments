@@ -15,12 +15,7 @@ public class UpdatePCountLauncher {
 	private PCountService pCountService;
 	
 	@Scheduled (cron = "*/1 * * * * *")
-	private void launchIncrease(){
-		pCountService.increasePCount();
-	}
-	
-	@Scheduled (cron = "*/1 * * * * *")
-	private void launchDecrease(){
-		pCountService.decreasePCount();
+	private void launchUpdatePCount(){
+		pCountService.updatePCount();
 	}
 }
