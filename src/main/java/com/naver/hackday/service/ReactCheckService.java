@@ -17,11 +17,7 @@ public class ReactCheckService implements ReactCheckRepository {
       pstReactService.pstReact(postId, commentId, userId);
     }
     else {
-      try {
-        throw new IllegalAccessException("잘못된 요청입니다.");
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      }
+      // 비공감의 경우를 위해 남겨 놓습니다.
     }
 
   }
