@@ -21,10 +21,11 @@ public class CachingKeyHelper {
     }
 
     public static String getValidationCommentListKey(String postKey, String pageKey) {
-        return String.format("%s%s%s%s%s%s%s%s",
+        return String.format("%s%s%s%s%s%s%s%s%s",
                 VALIDATION_PREFIX,
                 DELIMITER,
                 POSTNO_PREFIX,
+                DELIMITER,
                 postKey,
                 DELIMITER,
                 PAGENO_PREFIX,
