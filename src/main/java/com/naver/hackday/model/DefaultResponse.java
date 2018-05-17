@@ -7,13 +7,12 @@ public class DefaultResponse {
 
   private Object data;
   private String msg;
-  private StatusEnum statusEnum;
+  private Status status;
 
   public DefaultResponse() {
     this.data = null;
     this.msg = null;
-    this.statusEnum = StatusEnum.FAIL;
-
+    this.status = Status.FAIL;
   }
 
 }
