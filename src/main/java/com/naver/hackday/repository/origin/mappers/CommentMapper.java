@@ -1,9 +1,13 @@
 package com.naver.hackday.repository.origin.mappers;
 
 import com.naver.hackday.dto.CommentDto;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CommentMapper {
 
-   CommentDto findById(int commentId);
+    List<CommentDto> retreiveCommentOrderByLikeCount(@Param("cursor") Integer cursor, @Param("size") Integer size);
+    CommentDto findById(int commentId);
 
 }
