@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 import java.util.Date;
 
 @Service
-public class RedisPstReactService implements PstReactRepository {
+public class PstReactService implements PstReactRepository {
 
   private static final String KEY = "Pst";
   private RedisTemplate<String, Integer> redisTemplate;
@@ -24,24 +24,18 @@ public class RedisPstReactService implements PstReactRepository {
   // 해당 사용자가 공감한 댓글의 목록을 저장할 Set
   private SetOperations<String, Integer> commentsByUserIdSet;
 
-  // batch에서 사용할 List
+  // 공감수를 MySQL에 업데이트할 스케줄러에서 사용할 List
   private ListOperations<String, Integer> listOperations;
 
   // 가장 최근 공감 시간 저장을 위한 ValueOperations
   private ValueOperations<String, String> recentlyReactTime;
 
   @Autowired
-  private RedisPstReactService(RedisTemplate redisTemplate, RedisTemplate stringRedisTemplate) {
+  private PstReactService(RedisTemplate redisTemplate, RedisTemplate stringRedisTemplate) {
     this.redisTemplate = redisTemplate;
     this.stringRedisTemplate = stringRedisTemplate;
   }
 
-  /*
-  객체의 초기화
-  객체가 생성된 후 별도의 초기화 작업을 위해 실행하는 메소드
-  init 메소드는 WAS가 띄워질 때 실행됩니다.
-  (Autowired가 먼저 된 후 init 메소드가 실행됩니다.)
-   */
   @PostConstruct
   private void init() {
     usersByCommentIdSet = redisTemplate.opsForSet();        // "Pst" + "commentId" : userId
@@ -50,7 +44,12 @@ public class RedisPstReactService implements PstReactRepository {
     recentlyReactTime = stringRedisTemplate.opsForValue();  // "PstTime" : Long.toString(new Date().getTime())
   }
 
-  // 사용자의 공감 요청 처리
+  /**
+   * 사용자의 공감 요청 처리
+   * @param postId
+   * @param commentId
+   * @param userId
+   */
   @Override
   public void pstReact(int postId, int commentId, int userId) {
     // 이미 해당 댓글에 공감했다면 공감 취소
@@ -63,7 +62,12 @@ public class RedisPstReactService implements PstReactRepository {
     }
   }
 
-  // Redis에 공감 데이터 삽입
+  /**
+   * Redis에 공감 데이터 삽입
+   * @param postId
+   * @param commentId
+   * @param userId
+   */
   @Override
   public void insert(int postId, int commentId, int userId) {
 
@@ -74,7 +78,11 @@ public class RedisPstReactService implements PstReactRepository {
 
   }
 
-  // Redis에서 공감 데이터 삭제
+  /**
+   * Redis에서 공감 데이터 삭제
+   * @param commentId
+   * @param userId
+   */
   @Override
   public void delete(int commentId, int userId) {
 
@@ -85,7 +93,12 @@ public class RedisPstReactService implements PstReactRepository {
 
   }
 
-  // 공감 여부 확인을 위한 메소드
+  /**
+   * 공감 여부 확인을 위한 메소드
+   * @param commentId
+   * @param userId
+   * @return
+   */
   public boolean isMember(int commentId, int userId) {
     return this.usersByCommentIdSet.isMember(KEY + Integer.toString(commentId), userId);
   }
