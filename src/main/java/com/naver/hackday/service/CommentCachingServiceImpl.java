@@ -99,7 +99,7 @@ public class CommentCachingServiceImpl implements CommentListService {
     }
 
     private boolean isReactStatus(int userId, int commentId) {
-        return redisRepository.isMember(CachingKeyHelper.getReactUserSetKey(Integer.toString(1)), userId);
+        return redisRepository.isMember(CachingKeyHelper.getReactUserSetKey(Integer.toString(commentId)), userId);
     }
 
     private List<CommentRtn> convertCommentDtoToRtn(List<CommentDto> dtoList, int userId) {
