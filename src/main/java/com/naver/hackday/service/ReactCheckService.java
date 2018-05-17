@@ -11,9 +11,9 @@ public class ReactCheckService implements ReactCheckRepository {
   private PstReactService pstReactService;
 
   @Override
-  public void reactCheck(int postId, int commentId, int userId, int react) {
+  public void reactCheck(int postId, int commentId, int userId, int reactValue) {
 
-    if (react == 1) {
+    if (reactValue == 1) {
       pstReactService.pstReact(postId, commentId, userId);
     }
     else {
