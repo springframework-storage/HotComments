@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 public class ReactCheckService implements ReactCheckRepository {
 
   @Autowired
-  private RedisPstReactService redisPstReactService;
+  private PstReactService pstReactService;
 
   @Override
-  public void reactCheck(int postId, int commentId, int userId, String react) {
+  public void reactCheck(int postId, int commentId, int userId, int react) {
 
-    if (react.equals("pst")) {
-      redisPstReactService.pstReact(postId, commentId, userId);
+    if (react == 1) {
+      pstReactService.pstReact(postId, commentId, userId);
     }
     else {
       try {
