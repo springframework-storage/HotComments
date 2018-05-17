@@ -13,7 +13,7 @@
 
     <select id="findById" parameterType="java.lang.Integer" resultType="com.naver.hackday.dto.CommentDto">
         SELECT *
-        FROM TB_COMMENT m
+        FROM tb_comment m
         WHERE m.id = #{commentId}
     </select>
 
