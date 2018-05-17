@@ -2,7 +2,7 @@ package com.naver.hackday.controller;
 
 import com.naver.hackday.dto.CommentDto;
 import com.naver.hackday.model.DefaultResponse;
-import com.naver.hackday.model.StatusEnum;
+import com.naver.hackday.model.Status;
 import com.naver.hackday.service.CommentService;
 import com.naver.hackday.service.ReactCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +36,12 @@ public class ReactController {
     reactCheckService.reactCheck(postId, comment.getId(), userId, react);
 
     /*
-    뷰에서 해당 사용자의 공감 요청에 따른
-    공감수 변화(+1, -1)을 보여주기 위해
-    공감수를 응답 바디에 채워 넘깁니다.
+    Comment 자체를 넘김으로서
+    프론트에서 Comment의 각 요소들을 활용할 수 있도록 제공합니다.
      */
-    res.setData(comment.getPCount());
+    res.setData(comment);
     res.setMsg(commentId + "번 댓글에 대한 요청입니다.");
-    res.setStatusEnum(StatusEnum.SUCCESS);
+    res.setStatus(Status.SUCCESS);
     return new ResponseEntity<>(res, HttpStatus.OK);
 
   }
