@@ -8,5 +8,6 @@ import java.util.List;
 public interface CommentMapper {
 
     List<CommentDto> retreiveCommentOrderByLikeCount(@Param("cursor") Integer cursor, @Param("size") Integer size);
+    CommentDto findById(int commentId);
 
 }
