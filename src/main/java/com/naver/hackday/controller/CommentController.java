@@ -21,6 +21,8 @@ import java.util.Objects;
 @RestController
 public class CommentController extends BaseRestController {
 
+    private static Logger logger = LoggerFactory.getLogger("log.hackday");
+
     @Getter
     private enum OrderType {
         ASC(0, "ASC"),
@@ -50,6 +52,7 @@ public class CommentController extends BaseRestController {
                                                        @RequestParam(value = "pageSize") Integer pageSize,
                                                        @RequestParam(value = "orderType") String orderType,
                                                        @RequestParam(value = "pageNo") Integer pageNo) {
+        logger.debug("GET : /v1/comments?cursor : " + cursor + " pageNo : " + pageNo + " pageSize : " + pageSize + " userId : " + userId);
 
         if (pageSize <= 0) {
             throw new BadRequestException(BaseCode.BAD_REQUEST.getMessage() + " -> pageSize 조건 확인");
