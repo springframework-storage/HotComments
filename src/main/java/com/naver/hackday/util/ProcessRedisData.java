@@ -26,12 +26,9 @@ public class ProcessRedisData {
 	public List<PCount> getResultList() {
 		getRedisData();
 
-		if (!increaseList.isEmpty()) 
-			sortList(increaseList);
-		
-		if (!decreaseList.isEmpty())
-			sortList(decreaseList);
-		
+		sortList(increaseList);
+		sortList(decreaseList);
+
 		if (!increaseList.isEmpty() && !decreaseList.isEmpty())
 			offset(increaseList, decreaseList);
 
@@ -47,14 +44,14 @@ public class ProcessRedisData {
 		Integer commentId;
 
 		for (int i = 0; i < 3000; ++i) {
-			commentId = listOperations.leftPop("PstDelete");
-			if (commentId != null) {
-				if (commentId > 0)
-					increaseList.add(commentId);
-				else
-					decreaseList.add(Math.abs(commentId));
-			} else
+			commentId = listOperations.leftPop("Pst");
+			if (commentId == null)
 				return;
+
+			if (commentId > 0)
+				increaseList.add(commentId);
+			else
+				decreaseList.add(Math.abs(commentId));
 		}
 
 	}
@@ -71,7 +68,7 @@ public class ProcessRedisData {
 			if (increaseList.get(increaseIndex) == decreaseList.get(decreaseIndex)) {
 				increaseList.remove(increaseIndex);
 				decreaseList.remove(decreaseIndex);
-				
+
 				increaseIndex++;
 				decreaseIndex++;
 			} else if (increaseList.get(increaseIndex) < decreaseList.get(decreaseIndex))
