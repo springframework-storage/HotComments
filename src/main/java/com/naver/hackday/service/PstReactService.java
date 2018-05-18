@@ -72,7 +72,7 @@ public class PstReactService implements PstReactRepository {
 
     this.usersByCommentIdSet.add(KEY + Integer.toString(commentId), userId);
     this.commentsByUserIdSet.add(Integer.toString(userId) + KEY, commentId);
-    this.listOperations.rightPush(KEY + "Insert", commentId);
+    this.listOperations.rightPush(KEY, commentId);
     this.recentlyReactTime.set(KEY + "Time", Long.toString(new Date().getTime()));
 
   }
@@ -86,7 +86,7 @@ public class PstReactService implements PstReactRepository {
 
     this.usersByCommentIdSet.remove(KEY + Integer.toString(commentId), userId);
     this.commentsByUserIdSet.remove(Integer.toString(userId) + KEY, commentId);
-    this.listOperations.rightPush(KEY + "Delete", commentId);
+    this.listOperations.rightPush(KEY, commentId * (-1));
     this.recentlyReactTime.set(KEY + "Time", Long.toString(new Date().getTime()));
 
   }
