@@ -1,6 +1,8 @@
 package com.naver.hackday.service;
 
 import com.naver.hackday.repository.PstReactRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 @Service
 public class PstReactService implements PstReactRepository {
+
+  private static Logger logger = LoggerFactory.getLogger("log.hackday");
 
   private static final String KEY = "Pst";
   private RedisTemplate<String, Integer> redisTemplate;
@@ -55,10 +59,12 @@ public class PstReactService implements PstReactRepository {
     // 이미 해당 댓글에 공감했다면 공감 취소
     if (this.isMember(commentId, userId)) {
       this.pstDelete(commentId, userId);
+      logger.debug("공감 취소 : commentId : " + commentId + "userId : " + userId);
     }
     // 아니라면 공감
     else {
       this.pstInsert(postId, commentId, userId);
+      logger.debug("공감 : commentId : " + commentId + "userId : " + userId);
     }
   }
 

@@ -11,6 +11,8 @@ import com.naver.hackday.model.codingsquid.ReactStatus;
 import com.naver.hackday.repository.cache.RedisRepository;
 import com.naver.hackday.util.cache.CachingKeyHelper;
 import com.naver.hackday.util.cache.CachingServiceHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ import java.util.stream.Stream;
 
 @Service
 public class CommentCachingServiceImpl implements CommentListService {
+
+    private static Logger logger = LoggerFactory.getLogger("log.hackday");
 
     private final CommentListService commentListService;
     private final RedisRepository redisRepository;
@@ -94,12 +98,13 @@ public class CommentCachingServiceImpl implements CommentListService {
         baseListRtn.setTotalSize(resultDatas.size());
 
         result.setResult(baseListRtn);
+        logger.debug("return_code : " + result.getReturnCode() + " return_message : " + result.getReturnMessage());
 
         return result;
     }
 
     private boolean isReactStatus(int userId, int commentId) {
-        return redisRepository.isMember(CachingKeyHelper.getReactUserSetKey(Integer.toString(commentId)), userId);
+       return redisRepository.isMember(CachingKeyHelper.getReactUserSetKey(Integer.toString(commentId)), userId);
     }
 
     private List<CommentRtn> convertCommentDtoToRtn(List<CommentDto> dtoList, int userId) {

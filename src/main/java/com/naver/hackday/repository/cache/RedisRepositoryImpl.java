@@ -1,6 +1,8 @@
 package com.naver.hackday.repository.cache;
 
 import com.naver.hackday.dto.CommentDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RedisRepositoryImpl implements RedisRepository {
+
+    private static Logger logger = LoggerFactory.getLogger("log.hackday");
 
     private RedisTemplate<String, Object> redisTemplate;
     private RedisTemplate<String, CommentDto> commentDtoRedisTemplate;
@@ -78,6 +82,7 @@ public class RedisRepositoryImpl implements RedisRepository {
 
     @Override
     public void deleteData(String key) {
+        logger.debug("delete redis data key : " + key);
         redisTemplate.delete(key);
     }
 
