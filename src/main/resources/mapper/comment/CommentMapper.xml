@@ -5,7 +5,7 @@
 <mapper namespace="com.naver.hackday.repository.origin.mappers.CommentMapper">
     <select id="retreiveCommentOrderByLikeCount" parameterType="java.lang.Integer" resultType="com.naver.hackday.dto.CommentDto">
       SELECT id, postId, userId, content, nCount, pCount, totalCount
-      FROM 
+      FROM tb_comment
       ORDER BY nCount DESC
       LIMIT #{cursor}, #{size}
     </select>
