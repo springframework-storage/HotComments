@@ -19,6 +19,7 @@ public class PstReactService implements PstReactRepository {
   private static Logger logger = LoggerFactory.getLogger("log.hackday");
 
   private static final String KEY = "Pst";
+  private static final String SCHEDULER = "Scheduler";
   private RedisTemplate<String, Integer> redisTemplate;
   private RedisTemplate<String, String> stringRedisTemplate;
 
@@ -74,12 +75,12 @@ public class PstReactService implements PstReactRepository {
    * @param commentId
    * @param userId
    */
-  public void pstInsert(int postId, int commentId, int userId) {
+  private void pstInsert(int postId, int commentId, int userId) {
 
     this.usersByCommentIdSet.add(KEY + Integer.toString(commentId), userId);
     this.commentsByUserIdSet.add(Integer.toString(userId) + KEY, commentId);
-    this.listOperations.rightPush(KEY, commentId);
     this.recentlyReactTime.set(KEY + "Time", Long.toString(new Date().getTime()));
+    this.schedulerModulator(commentId);
 
   }
 
@@ -88,12 +89,12 @@ public class PstReactService implements PstReactRepository {
    * @param commentId
    * @param userId
    */
-  public void pstDelete(int commentId, int userId) {
+  private void pstDelete(int commentId, int userId) {
 
     this.usersByCommentIdSet.remove(KEY + Integer.toString(commentId), userId);
     this.commentsByUserIdSet.remove(Integer.toString(userId) + KEY, commentId);
-    this.listOperations.rightPush(KEY, commentId * (-1));
     this.recentlyReactTime.set(KEY + "Time", Long.toString(new Date().getTime()));
+    this.schedulerModulator(commentId * (-1));
 
   }
 
@@ -103,8 +104,22 @@ public class PstReactService implements PstReactRepository {
    * @param userId
    * @return
    */
-  public boolean isMember(int commentId, int userId) {
+  private boolean isMember(int commentId, int userId) {
     return this.usersByCommentIdSet.isMember(KEY + Integer.toString(commentId), userId);
   }
+
+  /**
+   * 스케줄러 4대 각각의 listOperation에 분배하는 메소드
+   * commentId를 매개변수로 받아 나머지를 계산해 분배합니다.
+   * @param commentId
+   */
+  private void schedulerModulator(int commentId) {
+    if (Math.abs(commentId) % 4 == 1) this.listOperations.rightPush(SCHEDULER + 1, commentId);
+    else if (Math.abs(commentId) % 4 == 2) this.listOperations.rightPush(SCHEDULER + 2, commentId);
+    else if (Math.abs(commentId) % 4 == 3) this.listOperations.rightPush(SCHEDULER + 3, commentId);
+    else this.listOperations.rightPush(SCHEDULER + 4, commentId);
+  }
+
+
 
 }
