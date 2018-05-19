@@ -5,7 +5,7 @@ import com.naver.hackday.model.DefaultResponse;
 import com.naver.hackday.model.ReactParam;
 import com.naver.hackday.model.Status;
 import com.naver.hackday.service.CommentService;
-import com.naver.hackday.service.ReactCheckService;
+import com.naver.hackday.service.CheckToReactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ReactController {
   private CommentService commentService;
 
   @Autowired
-  private ReactCheckService reactCheckService;
+  private CheckToReactService checkToReactService;
 
   /**
    * 사용자의 공감 요청을 받습니다.
@@ -59,7 +59,7 @@ public class ReactController {
     CheckService로 파라미터를 넘길 때
     reactParam의 Value를 꺼내 int로 변환합니다.
      */
-    reactCheckService.reactCheck(postId, comment.getId(), userId, reactParam.getValue());
+    checkToReactService.checkToReact(postId, comment.getId(), userId, reactParam);
 
     /*
     Comment 자체를 넘김으로서

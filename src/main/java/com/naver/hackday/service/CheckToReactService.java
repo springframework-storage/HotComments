@@ -1,19 +1,22 @@
 package com.naver.hackday.service;
 
-import com.naver.hackday.repository.ReactCheckRepository;
+import com.naver.hackday.model.ReactParam;
+import com.naver.hackday.repository.CheckToReactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReactCheckService implements ReactCheckRepository {
+public class CheckToReactService implements CheckToReactRepository {
+
+  private static final String PST = "Pst";
 
   @Autowired
   private PstReactService pstReactService;
 
   @Override
-  public void reactCheck(int postId, int commentId, int userId, int reactValue) {
+  public void checkToReact(int postId, int commentId, int userId, ReactParam reactParam) {
 
-    if (reactValue == 1) {
+    if (reactParam.Pst.equals(reactParam)) {
       pstReactService.pstReact(postId, commentId, userId);
     }
     else {
