@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CheckToReactService implements CheckToReactRepository {
 
-  private static final String PST = "Pst";
-
   @Autowired
   private PstReactService pstReactService;
 
