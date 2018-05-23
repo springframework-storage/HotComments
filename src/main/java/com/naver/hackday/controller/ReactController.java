@@ -1,7 +1,7 @@
 package com.naver.hackday.controller;
 
 import com.naver.hackday.dto.CommentDto;
-import com.naver.hackday.model.DefaultResponse;
+import com.naver.hackday.model.Response;
 import com.naver.hackday.model.ReactParam;
 import com.naver.hackday.model.Status;
 import com.naver.hackday.service.CommentService;
@@ -37,10 +37,10 @@ public class ReactController {
    * @return
    */
   @GetMapping("{postId}/{commentId}/{userId}/{reactParam}")
-  public ResponseEntity<DefaultResponse> integrationReact(@PathVariable int postId,
-                                                          @PathVariable int commentId,
-                                                          @PathVariable int userId,
-                                                          @PathVariable ReactParam reactParam) {
+  public ResponseEntity<Response> integrationReact(@PathVariable int postId,
+                                                   @PathVariable int commentId,
+                                                   @PathVariable int userId,
+                                                   @PathVariable ReactParam reactParam) {
     logger.debug(new StringBuilder()
             .append("postId : ")
             .append(Integer.toString(postId))
@@ -50,7 +50,7 @@ public class ReactController {
             .append(Integer.toString(userId))
             .append("reactParam : ")
             .append(reactParam).toString());
-    DefaultResponse res = new DefaultResponse();
+    Response res = new Response();
 
     // 해당 commentId의 댓글이 존재하는지 찾습니다.
     CommentDto comment = commentService.findById(commentId);
