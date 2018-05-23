@@ -44,6 +44,7 @@ public class CommentControllerTest {
   @Test
   public void getCommentList() throws Exception {
     this.mockMvc.perform(get("/v1/comments/1")
+<<<<<<< HEAD
                 .param("userId", "1")
                 .param("cursor", "1")
                 .param("pageSize", "100")
@@ -53,10 +54,25 @@ public class CommentControllerTest {
                 .andExpect(handler().methodName("doGet"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+=======
+            .param("userId", "1")
+            .param("cursor", "1")
+            .param("pageSize", "100")
+            .param("orderType", "ASC")
+            .param("pageNo", "1"))
+            .andExpect(handler().handlerType(CommentController.class))
+            .andExpect(handler().methodName("doGet"))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print());
+>>>>>>> temp/develop
 
     // 위 코드와 별개 - 간이 테스트
     BaseResponse<BaseListRtn<CommentDto>> result = this.commentOriginService.doGet(1, 1, 100, "ASC", 1, 1);
     assertThat(result).isNotNull();
   }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> temp/develop

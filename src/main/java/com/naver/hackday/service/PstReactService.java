@@ -120,6 +120,4 @@ public class PstReactService implements PstReactRepository {
     else this.listOperations.rightPush(SCHEDULER + 4, commentId);
   }
 
-
-
 }

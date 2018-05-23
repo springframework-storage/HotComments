@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -32,9 +31,7 @@ public class ReactControllerTest {
 
   @Test
   public void integrationReact() throws Exception {
-    this.mockMvc.perform(get("/react/1/7/3/Pst")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+    this.mockMvc.perform(get("/react/1/7/3/Pst"))
                 .andExpect(handler().handlerType(ReactController.class))
                 .andExpect(handler().methodName("integrationReact"))
                 .andExpect(status().isOk())
