@@ -75,8 +75,8 @@ public class ProcessRedisData {
 
     while (increaseIndex < increaseList.size() && decreaseIndex < decreaseList.size()) {
       if (increaseList.get(increaseIndex) == decreaseList.get(decreaseIndex)) {
-        increaseList.remove(increaseIndex++);
-        decreaseList.remove(decreaseIndex++);
+        increaseList.remove(increaseIndex);
+        decreaseList.remove(decreaseIndex);
       }
       else if (increaseList.get(increaseIndex) < decreaseList.get(decreaseIndex)) increaseIndex++;
       else decreaseIndex++;
