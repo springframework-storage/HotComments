@@ -1,33 +1,28 @@
 package com.naver.hackday.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.naver.hackday.model.PCount;
+import com.naver.hackday.util.ProcessRedisData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.naver.hackday.model.PCount;
-import com.naver.hackday.repository.origin.mappers.CommentMapper;
-import com.naver.hackday.util.ProcessRedisData;
+import java.util.List;
 
 @Service
 public class PCountServiceImpl implements PCountService {
 
 	@Autowired
-	CommentMapper commentMapper;
+  private CommentService commentService;
 
 	@Autowired
 	private ProcessRedisData processRedisData;
 
-	private List<PCount> pCountList = new ArrayList<PCount>();
-
+//  @Async
 	@Override
-	@Async
 	public void updatePCount() {
-		pCountList = processRedisData.getResultList();
+		List<PCount> pCountList = processRedisData.getResultList();
+
 		if (!pCountList.isEmpty())
-			commentMapper.updatePCount(pCountList);
+		  commentService.updatePCount(pCountList);
 	}
 
 }
