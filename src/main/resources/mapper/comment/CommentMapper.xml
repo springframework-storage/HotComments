@@ -20,6 +20,6 @@
       <foreach collection="list" item="comment" index="index" separator=";">
             UPDATE tb_comment SET pCount = pCount+#{comment.count}
             WHERE id = #{comment.id}
-        </foreach> 
+      </foreach>
     </update>
 </mapper>
