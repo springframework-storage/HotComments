@@ -45,6 +45,8 @@ public class ProcessRedisDataTest {
 
     log.info("increaseList: {}", increaseList.toString());
     log.info("decreaseList: {}", decreaseList.toString());
+    Assert.assertNotNull(increaseList);
+    Assert.assertNotNull(decreaseList);
 
   }
 
@@ -77,6 +79,8 @@ public class ProcessRedisDataTest {
     }
     log.info("increaseList: {}", increaseList.toString());
     log.info("decreaseList: {}", decreaseList.toString());
+    Assert.assertNotNull(increaseList);
+    Assert.assertNotNull(decreaseList);
   }
 
   @Test
