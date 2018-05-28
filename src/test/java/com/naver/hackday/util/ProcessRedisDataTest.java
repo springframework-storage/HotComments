@@ -67,11 +67,15 @@ public class ProcessRedisDataTest {
     if (!increaseList.isEmpty() && !decreaseList.isEmpty()) {
       int increaseIndex = 0;
       int decreaseIndex = 0;
+      int increaseListSize = increaseList.size();
+      int decreaseListSize = decreaseList.size();
 
-      while (increaseIndex < increaseList.size() && decreaseIndex < decreaseList.size()) {
+      while (increaseIndex < increaseListSize && decreaseIndex < decreaseListSize) {
         if (increaseList.get(increaseIndex) == decreaseList.get(decreaseIndex)) {
           increaseList.remove(increaseIndex);
           decreaseList.remove(decreaseIndex);
+          increaseListSize--;
+          decreaseListSize--;
         }
         else if (increaseList.get(increaseIndex) < decreaseList.get(decreaseIndex)) increaseIndex++;
         else decreaseIndex++;
@@ -90,7 +94,9 @@ public class ProcessRedisDataTest {
 
     int count = 0;
     int commentId = increaseList.get(0);
-    for (int index = 0; index < increaseList.size(); ++index) {
+    int increaseListSize = increaseList.size();
+
+    for (int index = 0; index < increaseListSize; ++index) {
 
       if (commentId == increaseList.get(index)) count++;
       else {
