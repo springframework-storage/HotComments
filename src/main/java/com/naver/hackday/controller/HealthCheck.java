@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class HealthCheck {
 
-    @GetMapping(value = "/empathy/monitor/l7check")
-    public String healthCheck(HttpServletResponse response) {
-        response.setStatus(HttpStatus.OK.value());
-        return "i'm running";
-    }
+  @GetMapping(value = "/empathy/monitor/l7check")
+  public String healthCheck(HttpServletResponse response) {
+    response.setStatus(HttpStatus.OK.value());
+    return "i'm running";
+  }
 
 }

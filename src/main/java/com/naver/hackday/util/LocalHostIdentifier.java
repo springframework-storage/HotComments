@@ -17,6 +17,7 @@ public class LocalHostIdentifier {
 
   /**
    * ip 주소를 가져오는 메소드
+   *
    * @return
    */
   public String getHost() {
@@ -33,6 +34,7 @@ public class LocalHostIdentifier {
   /**
    * ip 주소를 String ip 변수에 받아
    * 매칭시켜주는 역할의 메소드
+   *
    * @return
    */
   public int getHostMapping() {

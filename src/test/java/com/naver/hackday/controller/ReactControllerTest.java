@@ -32,10 +32,10 @@ public class ReactControllerTest {
   @Test
   public void integrationReact() throws Exception {
     this.mockMvc.perform(get("/react/1/7/3/Pst"))
-                .andExpect(handler().handlerType(ReactController.class))
-                .andExpect(handler().methodName("integrationReact"))
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
+            .andExpect(handler().handlerType(ReactController.class))
+            .andExpect(handler().methodName("integrationReact"))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print());
   }
 
 }

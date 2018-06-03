@@ -17,82 +17,82 @@ import java.util.Properties;
 @Configuration
 public class RedisConfig {
 
-    private JedisPoolConfig createJedisPoolConfig(final Properties redisConfig) {
-        final JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+  private JedisPoolConfig createJedisPoolConfig(final Properties redisConfig) {
+    final JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 
-        // set as default
-        jedisPoolConfig.setTestOnBorrow(false);
-        jedisPoolConfig.setTestOnReturn(false);
-        jedisPoolConfig.setTestWhileIdle(true);
-        jedisPoolConfig.setNumTestsPerEvictionRun(10);
-        jedisPoolConfig.setTimeBetweenEvictionRunsMillis(60000);
-        jedisPoolConfig.setMinIdle(1);
+    // set as default
+    jedisPoolConfig.setTestOnBorrow(false);
+    jedisPoolConfig.setTestOnReturn(false);
+    jedisPoolConfig.setTestWhileIdle(true);
+    jedisPoolConfig.setNumTestsPerEvictionRun(10);
+    jedisPoolConfig.setTimeBetweenEvictionRunsMillis(60000);
+    jedisPoolConfig.setMinIdle(1);
 
-        // set by config
-        jedisPoolConfig.setMaxWaitMillis(Long.parseLong(redisConfig.getProperty("redis.pool.maxWaitMillis")));
-        jedisPoolConfig.setMaxIdle(Integer.parseInt(redisConfig.getProperty("redis.pool.maxIdle")));
-        jedisPoolConfig.setMaxTotal(Integer.parseInt(redisConfig.getProperty("redis.pool.maxTotal")));
+    // set by config
+    jedisPoolConfig.setMaxWaitMillis(Long.parseLong(redisConfig.getProperty("redis.pool.maxWaitMillis")));
+    jedisPoolConfig.setMaxIdle(Integer.parseInt(redisConfig.getProperty("redis.pool.maxIdle")));
+    jedisPoolConfig.setMaxTotal(Integer.parseInt(redisConfig.getProperty("redis.pool.maxTotal")));
 
-        return jedisPoolConfig;
-    }
+    return jedisPoolConfig;
+  }
 
-    @Bean(name = "jedisConnectionFactory", destroyMethod = "destroy")
-    public JedisConnectionFactory jedisConnectionFactory() throws IOException {
-        final Properties redisConfig = PropertiesLoaderUtils.loadProperties(
-                new PathMatchingResourcePatternResolver().getResource("classpath:redis.properties"));
+  @Bean(name = "jedisConnectionFactory", destroyMethod = "destroy")
+  public JedisConnectionFactory jedisConnectionFactory() throws IOException {
+    final Properties redisConfig = PropertiesLoaderUtils.loadProperties(
+            new PathMatchingResourcePatternResolver().getResource("classpath:redis.properties"));
 
-        final JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+    final JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
 
-        jedisConnectionFactory.setHostName(redisConfig.getProperty("redis.hostname"));
-        jedisConnectionFactory.setPort(Integer.parseInt(redisConfig.getProperty("redis.port")));
-        jedisConnectionFactory.setUsePool(Boolean.parseBoolean(redisConfig.getProperty("redis.pool.use")));
-        jedisConnectionFactory.setTimeout(Integer.parseInt(redisConfig.getProperty("redis.timeout")));
-        jedisConnectionFactory.setPoolConfig(createJedisPoolConfig(redisConfig));
+    jedisConnectionFactory.setHostName(redisConfig.getProperty("redis.hostname"));
+    jedisConnectionFactory.setPort(Integer.parseInt(redisConfig.getProperty("redis.port")));
+    jedisConnectionFactory.setUsePool(Boolean.parseBoolean(redisConfig.getProperty("redis.pool.use")));
+    jedisConnectionFactory.setTimeout(Integer.parseInt(redisConfig.getProperty("redis.timeout")));
+    jedisConnectionFactory.setPoolConfig(createJedisPoolConfig(redisConfig));
 
-        jedisConnectionFactory.afterPropertiesSet();
+    jedisConnectionFactory.afterPropertiesSet();
 
-        return jedisConnectionFactory;
-    }
+    return jedisConnectionFactory;
+  }
 
-    @Bean(name = "redisTemplate")
-    public RedisTemplate<String, Object> redisTemplate() throws IOException {
-        final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setEnableTransactionSupport(true);
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+  @Bean(name = "redisTemplate")
+  public RedisTemplate<String, Object> redisTemplate() throws IOException {
+    final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setEnableTransactionSupport(true);
+    redisTemplate.setConnectionFactory(jedisConnectionFactory());
 
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
-        redisTemplate.afterPropertiesSet();
+    redisTemplate.afterPropertiesSet();
 
-        return redisTemplate;
-    }
+    return redisTemplate;
+  }
 
-    @Bean(name = "commentDtoRedisTemplate")
-    public RedisTemplate<String, CommentDto> commentDtoRedisTemplate() throws IOException {
-        final RedisTemplate<String, CommentDto> redisTemplate = new RedisTemplate<>();
+  @Bean(name = "commentDtoRedisTemplate")
+  public RedisTemplate<String, CommentDto> commentDtoRedisTemplate() throws IOException {
+    final RedisTemplate<String, CommentDto> redisTemplate = new RedisTemplate<>();
 
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(CommentDto.class));
+    redisTemplate.setConnectionFactory(jedisConnectionFactory());
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(CommentDto.class));
 
-        return redisTemplate;
-    }
+    return redisTemplate;
+  }
 
-    @Bean(name = "stringRedisTemplate")
-    public RedisTemplate<String, String> stringRedisTemplate() throws IOException {
-        final RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+  @Bean(name = "stringRedisTemplate")
+  public RedisTemplate<String, String> stringRedisTemplate() throws IOException {
+    final RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
 
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+    redisTemplate.setConnectionFactory(jedisConnectionFactory());
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new StringRedisSerializer());
 
-        redisTemplate.afterPropertiesSet();
+    redisTemplate.afterPropertiesSet();
 
-        return redisTemplate;
-    }
-    
+    return redisTemplate;
+  }
+
 }

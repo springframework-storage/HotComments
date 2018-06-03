@@ -10,9 +10,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ErrorModel {
 
-    @JsonProperty("return_code")
-    private int errorCode;
-    @JsonProperty("return_message")
-    private String errorMessage;
+  @JsonProperty("return_code")
+  private int errorCode;
+  @JsonProperty("return_message")
+  private String errorMessage;
 
 }

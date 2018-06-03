@@ -51,6 +51,7 @@ public class PstReactService implements PstReactRepository {
 
   /**
    * 사용자의 공감 요청 처리
+   *
    * @param postId
    * @param commentId
    * @param userId
@@ -71,6 +72,7 @@ public class PstReactService implements PstReactRepository {
 
   /**
    * Redis에 공감 데이터 삽입
+   *
    * @param postId
    * @param commentId
    * @param userId
@@ -86,6 +88,7 @@ public class PstReactService implements PstReactRepository {
 
   /**
    * Redis에서 공감 데이터 삭제
+   *
    * @param commentId
    * @param userId
    */
@@ -100,6 +103,7 @@ public class PstReactService implements PstReactRepository {
 
   /**
    * 공감 여부 확인을 위한 메소드
+   *
    * @param commentId
    * @param userId
    * @return
@@ -111,6 +115,7 @@ public class PstReactService implements PstReactRepository {
   /**
    * 스케줄러 4대 각각의 listOperation에 분배하는 메소드
    * commentId를 매개변수로 받아 나머지를 계산해 분배합니다.
+   *
    * @param commentId
    */
   private void schedulerModulator(int commentId) {

@@ -10,10 +10,10 @@ import java.util.List;
 @Setter
 public class BaseListRtn<T> {
 
-    @JsonProperty("total_size")
-    protected int totalSize;
+  @JsonProperty("total_size")
+  protected int totalSize;
 
-    @JsonProperty("data_list")
-    protected List<T> datas;
+  @JsonProperty("data_list")
+  protected List<T> datas;
 
 }

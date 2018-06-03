@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CommentRepository {
 
-    List<CommentDto> retreiveCommentOrderByLikeCount(int cursor, int size);
+  List<CommentDto> retreiveCommentOrderByLikeCount(int cursor, int size);
 
 }

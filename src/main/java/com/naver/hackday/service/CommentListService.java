@@ -6,6 +6,6 @@ import com.naver.hackday.model.codingsquid.BaseResponse;
 
 public interface CommentListService<T> {
 
-    BaseResponse<BaseListRtn<T>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId);
+  BaseResponse<BaseListRtn<T>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId);
 
 }

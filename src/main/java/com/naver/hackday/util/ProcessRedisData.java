@@ -66,6 +66,7 @@ public class ProcessRedisData {
 
   /**
    * Redis의 데이터를 꺼내 각각 채워진 공감, 공감취소 List의 요소들을 비교해 간소화합니다.
+   *
    * @param increaseList
    * @param decreaseList
    */
@@ -90,6 +91,7 @@ public class ProcessRedisData {
 
   /**
    * 주기적인 데이터 저장을 위한 최종 List를 만듭니다.
+   *
    * @param increaseList
    * @param decreaseList
    * @return
@@ -108,8 +110,8 @@ public class ProcessRedisData {
   }
 
   /**
-   * Redis의 데이터를 꺼내
-   * 공감, 공감취소 List에 commentId를 채웁니다.
+   * Redis의 데이터를 꺼내 공감, 공감취소 List에 commentId를 채웁니다.
+   *
    * @param key
    */
 	private void fillIncDecList(String key) {
@@ -126,6 +128,7 @@ public class ProcessRedisData {
 
   /**
    * 공감 List 데이터를 resultList에 추가합니다.
+   *
    * @param increaseList
    */
 	private void totalIncreaseCount(List<Integer> increaseList) {
@@ -147,6 +150,7 @@ public class ProcessRedisData {
 
   /**
    * 공감 취소 List 데이터를 resultList에 추가합니다.
+   *
    * @param decreaseList
    */
   private void totalDecreaseCount(List<Integer> decreaseList) {

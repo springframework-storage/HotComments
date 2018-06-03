@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ValidCachingKey {
 
-    private String key;
-    private long cachingTime;
+  private String key;
+  private long cachingTime;
 
 }

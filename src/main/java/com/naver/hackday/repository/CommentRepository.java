@@ -8,6 +8,7 @@ import java.util.List;
 public interface CommentRepository {
 
   CommentDto findById(int id);
+
   void updatePCount(List<PCount> pCountList);
 
 }

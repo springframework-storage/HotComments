@@ -8,13 +8,13 @@ import lombok.Setter;
 @Setter
 public class CommentRtn {
 
-    private int id;
-    private int postId;
-    private int userId;
-    private String content;
-    private int pCount;
-    private int nCount;
-    private int totalCount;
-    private ReactStatus reactStatus;
+  private int id;
+  private int postId;
+  private int userId;
+  private String content;
+  private int pCount;
+  private int nCount;
+  private int totalCount;
+  private ReactStatus reactStatus;
 
 }

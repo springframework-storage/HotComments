@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static Logger logger = LoggerFactory.getLogger("log.hackday");
+  private static Logger logger = LoggerFactory.getLogger("log.hackday");
 
-    @ExceptionHandler(value = BaseException.class)
-    public @ResponseBody ErrorModel handleBaseException(BaseException e) {
-        logger.debug("GlobalException statusCode : " + e.getStatusCode() + " msg : " + e.getMessage());
-        return new ErrorModel(e.getStatusCode(), e.getMessage());
-    }
+  @ExceptionHandler(value = BaseException.class)
+  public @ResponseBody
+  ErrorModel handleBaseException(BaseException e) {
+    logger.debug("GlobalException statusCode : " + e.getStatusCode() + " msg : " + e.getMessage());
+    return new ErrorModel(e.getStatusCode(), e.getMessage());
+  }
 
 }

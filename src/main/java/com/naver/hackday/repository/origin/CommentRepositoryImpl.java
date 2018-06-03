@@ -12,10 +12,11 @@ import java.util.List;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CommentRepositoryImpl implements CommentRepository {
 
-    private final CommentMapper commentMapper;
+  private final CommentMapper commentMapper;
 
-    @Override
-    public List<CommentDto> retreiveCommentOrderByLikeCount(int cursor, int size) {
-        return commentMapper.retreiveCommentOrderByLikeCount(cursor, size);
-    }
+  @Override
+  public List<CommentDto> retreiveCommentOrderByLikeCount(int cursor, int size) {
+    return commentMapper.retreiveCommentOrderByLikeCount(cursor, size);
+  }
+
 }

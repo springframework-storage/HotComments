@@ -15,27 +15,27 @@ import java.util.List;
 @Service
 public class CommentOriginServiceImpl implements CommentListService {
 
-    private CommentRepository commentRepository;
+  private CommentRepository commentRepository;
 
-    @Autowired
-    public CommentOriginServiceImpl(@Qualifier("commentRepositoryImpl") CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
+  @Autowired
+  public CommentOriginServiceImpl(@Qualifier("commentRepositoryImpl") CommentRepository commentRepository) {
+    this.commentRepository = commentRepository;
+  }
 
-    @Override
-    public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId) {
-        BaseResponse<BaseListRtn<CommentDto>> result = new BaseResponse<>();
-        BaseListRtn<CommentDto> baseListRtn = new BaseListRtn<>();
+  @Override
+  public BaseResponse<BaseListRtn<CommentDto>> doGet(int cursor, int pageSize, int pageNo, String orderType, int postId, int userId) {
+    BaseResponse<BaseListRtn<CommentDto>> result = new BaseResponse<>();
+    BaseListRtn<CommentDto> baseListRtn = new BaseListRtn<>();
 
-        List<CommentDto> dtos = commentRepository.retreiveCommentOrderByLikeCount((pageNo - 1) * pageSize, pageSize);
+    List<CommentDto> dtos = commentRepository.retreiveCommentOrderByLikeCount((pageNo - 1) * pageSize, pageSize);
 
-        baseListRtn.setDatas(dtos);
+    baseListRtn.setDatas(dtos);
 
-        result.setReturnCode(BaseCode.SUCCESS.getCode());
-        result.setReturnMessage(BaseCode.SUCCESS.getMessage());
-        result.setResult(baseListRtn);
+    result.setReturnCode(BaseCode.SUCCESS.getCode());
+    result.setReturnMessage(BaseCode.SUCCESS.getMessage());
+    result.setResult(baseListRtn);
 
-        return result;
-    }
+    return result;
+  }
 
 }

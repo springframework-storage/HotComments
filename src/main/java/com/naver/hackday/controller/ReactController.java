@@ -30,6 +30,7 @@ public class ReactController {
 
   /**
    * 사용자의 공감 요청을 받습니다.
+   *
    * @param postId
    * @param commentId
    * @param userId

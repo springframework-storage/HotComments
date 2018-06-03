@@ -11,12 +11,12 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class CommentDto {
 
-    private int id;
-    private int postId;
-    private int userId;
-    private String content;
-    private int pCount;
-    private int nCount;
-    private int totalCount;
+  private int id;
+  private int postId;
+  private int userId;
+  private String content;
+  private int pCount;
+  private int nCount;
+  private int totalCount;
 
 }

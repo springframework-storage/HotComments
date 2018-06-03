@@ -10,12 +10,12 @@ import com.naver.hackday.service.PCountService;
 @Component
 @EnableScheduling
 public class UpdatePCountLauncher {
-	
-	@Autowired
-	private PCountService pCountService;
-	
-	@Scheduled (cron = "*/1 * * * * *")
-	private void launchUpdatePCount(){
-		pCountService.updatePCount();
-	}
+
+  @Autowired
+  private PCountService pCountService;
+
+  @Scheduled(cron = "*/1 * * * * *")
+  private void launchUpdatePCount() {
+    pCountService.updatePCount();
+  }
 }
