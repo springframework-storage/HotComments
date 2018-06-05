@@ -121,10 +121,18 @@ public class PstReactService implements PstReactRepository {
   private void schedulerModulator(int commentId) {
 
     switch (Math.abs(commentId) % 4) {
-      case 1: this.listOperations.rightPush(SCHEDULER + 1, commentId); break;
-      case 2: this.listOperations.rightPush(SCHEDULER + 2, commentId); break;
-      case 3: this.listOperations.rightPush(SCHEDULER + 3, commentId); break;
-      case 0: this.listOperations.rightPush(SCHEDULER + 4, commentId); break;
+      case 1:
+        this.listOperations.rightPush(SCHEDULER + 1, commentId);
+        break;
+      case 2:
+        this.listOperations.rightPush(SCHEDULER + 2, commentId);
+        break;
+      case 3:
+        this.listOperations.rightPush(SCHEDULER + 3, commentId);
+        break;
+      case 0:
+        this.listOperations.rightPush(SCHEDULER + 4, commentId);
+        break;
     }
 
 //    if (Math.abs(commentId) % 4 == 1) this.listOperations.rightPush(SCHEDULER + 1, commentId);

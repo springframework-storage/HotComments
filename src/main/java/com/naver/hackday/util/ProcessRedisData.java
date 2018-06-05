@@ -36,33 +36,41 @@ public class ProcessRedisData {
     this.listOperations = this.redisTemplate.opsForList();
   }
 
-	public List<PCount> getResultList() {
-		this.getRedisData();
+  public List<PCount> getResultList() {
+    this.getRedisData();
 
-		Collections.sort(increaseList);
-		Collections.sort(decreaseList);
+    Collections.sort(increaseList);
+    Collections.sort(decreaseList);
 
-		if (!increaseList.isEmpty() && !decreaseList.isEmpty()) {
+    if (!increaseList.isEmpty() && !decreaseList.isEmpty()) {
       this.arrangeIncDecList(increaseList, decreaseList);
     }
 
-		return this.makeResultList(increaseList, decreaseList);
-	}
+    return this.makeResultList(increaseList, decreaseList);
+  }
 
   /**
    * Redis 데이터를 꺼내는 것을 시작하는 메소드
    */
-	private void getRedisData() {
-		String key = null;
+  private void getRedisData() {
+    String key = null;
 
-		switch (localHostIdentifier.getHostMapping()) {
-      case 1: key = SCHEDULER + 1; break;
-      case 2: key = SCHEDULER + 2; break;
-      case 3: key = SCHEDULER + 3; break;
-      case 4: key = SCHEDULER + 4; break;
+    switch (localHostIdentifier.getHostMapping()) {
+      case 1:
+        key = SCHEDULER + 1;
+        break;
+      case 2:
+        key = SCHEDULER + 2;
+        break;
+      case 3:
+        key = SCHEDULER + 3;
+        break;
+      case 4:
+        key = SCHEDULER + 4;
+        break;
     }
     this.fillIncDecList(key);
-	}
+  }
 
   /**
    * Redis의 데이터를 꺼내 각각 채워진 공감, 공감취소 List의 요소들을 비교해 간소화합니다.
@@ -114,7 +122,7 @@ public class ProcessRedisData {
    *
    * @param key
    */
-	private void fillIncDecList(String key) {
+  private void fillIncDecList(String key) {
     Integer commentId = null;
 
     for (int i = 0; i < MAX_FILL; ++i) {
@@ -131,18 +139,18 @@ public class ProcessRedisData {
    *
    * @param increaseList
    */
-	private void totalIncreaseCount(List<Integer> increaseList) {
-	  int count = 0;
-	  int commentId = increaseList.get(0);
-	  int increaseListSize = increaseList.size();
+  private void totalIncreaseCount(List<Integer> increaseList) {
+    int count = 0;
+    int commentId = increaseList.get(0);
+    int increaseListSize = increaseList.size();
 
-	  for (int index = 0; index < increaseListSize; ++index) {
+    for (int index = 0; index < increaseListSize; ++index) {
 
-	    if (commentId == increaseList.get(index)) count++;
-	    else {
-	      resultList.add(new PCount(commentId, count));
-	      commentId = increaseList.get(index);
-	      count = 1;
+      if (commentId == increaseList.get(index)) count++;
+      else {
+        resultList.add(new PCount(commentId, count));
+        commentId = increaseList.get(index);
+        count = 1;
       }
     }
     resultList.add(new PCount(commentId, count));
