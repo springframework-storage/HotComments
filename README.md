@@ -5,7 +5,7 @@
 ---
 
 ## 성능테스트
-![ngrinder](./img/ngrinder.png)
+![ngrinder](./img/ngrinder1.png)
 
 --- 
 
